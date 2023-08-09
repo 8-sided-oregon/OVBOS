@@ -5,17 +5,26 @@ one very bad os (true)
 ## Requirements
 - `rust (nightly)`
 - `cargo`
+- `bootimage`
+- `llvm-tools-preview`
+- `cargo-xbuild`
 
 ## Building a boot image
 ```bash
-cargo bootimage --target x86_64-ovbos.json
+cargo bootimage
 ```
 
 This will generate a .bin file in `target/x86_64-ovbos/debug/bootimage-ovbos.bin` which can be booted by something such as QEMU reading it as a raw boot disk.
 
 # Running
-After building, you can run 
+Running
 ```bash
-qemu-system-x86_64 -drive format=raw,file=target/x86_64-ovbos/debug/bootimage-ovbos.bin
+cargo run
 ```
-to boot the OS in QEMU.
+will build the boot image and run it in QEMU.
+
+# Tests
+Running
+```bash
+cargo xtest
+```
