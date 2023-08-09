@@ -1,12 +1,15 @@
 use core::fmt;
+use x86_64::instructions::interrupts;
 use crate::serial::SERIAL1;
 use crate::vga::WRITER;
 
 #[doc(hidden)]
 pub fn _print(args: fmt::Arguments) {
     use core::fmt::Write;
-    WRITER.lock().write_fmt(args).unwrap();
-    SERIAL1.lock().write_fmt(args).unwrap();
+    interrupts::without_interrupts(|| {
+        WRITER.lock().write_fmt(args).unwrap();
+        SERIAL1.lock().write_fmt(args).unwrap();
+    });
 }
 
 #[macro_export]

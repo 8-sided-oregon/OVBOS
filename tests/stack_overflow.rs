@@ -4,13 +4,12 @@
 #![test_runner(ovbos::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
-use ovbos::println;
 use core::panic::PanicInfo;
+use ovbos::{println};
 
-#[no_mangle] // don't mangle the name of this function
+#[no_mangle]
 pub extern "C" fn _start() -> ! {
     test_main();
-
     loop {}
 }
 
@@ -20,6 +19,10 @@ fn panic(info: &PanicInfo) -> ! {
 }
 
 #[test_case]
-fn test_println() {
-    println!("can you see this in vga and serial? if so then it works");
+fn test_stack_overflow() {
+    fn overflow() {
+        overflow();
+    }
+
+    overflow();
 }
